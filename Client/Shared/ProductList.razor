@@ -1,0 +1,60 @@
+﻿@inject HttpClient httpClient
+@using SportStore.Shared.Models
+@inject NavigationManager navigationManager
+
+
+<div class="container mt-4">
+    <div class="row">
+        @foreach (var articulo in Products)
+        {
+            <div class="col-auto mb-3">
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src=@articulo.ImageURL alt="Book.Imagen">
+                    <div class="card-body">
+                        <h5 class="card-title">@articulo.Name</h5>
+                        <p class="card-text">
+                            <br>
+                            @articulo.Description
+                            <br>
+                            <b>Precio:</b> @articulo.Price
+                        </p>
+                        @if (DisplayBuyButton && articulo.Qty > 0)
+                        {
+                            <button class="btn btn-primary" type="button" @onclick="() => Buy(articulo)">Buy</button>
+                        }
+                        else if (DisplayBuyButton && articulo.Qty <= 0)
+                        {
+                            <b> No disponible </b>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public List<Product> Products { get; set; } = new();
+    [Parameter]
+    public bool DisplayBuyButton { get; set; }
+
+    private async Task Buy(Product articulo)
+    {
+        CartProduct C_articulo = new CartProduct
+        {
+                Name = articulo.Name, 
+                ProdId = articulo.Id,
+                Description = articulo.Description,
+                ImageURL = articulo.ImageURL,
+                Price = articulo.Price,
+                Qty = 1,
+                SportId = articulo.SportId
+        };
+
+        await httpClient.PostAsJsonAsync("/api/cartproduct/", C_articulo);
+        await httpClient.PutAsJsonAsync("/api/product/", articulo.Id);
+    }
+}

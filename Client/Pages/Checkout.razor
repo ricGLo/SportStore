@@ -1,0 +1,21 @@
+﻿@page "/checkout"
+
+@inject HttpClient httpClient
+@using SportStore.Shared.Models
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+
+<h1 style="text-align:center">  Carrito de compras  </h1>
+
+<h3> Tienes @listaCarrito.Count libros en tu carrito de compras:</h3>
+<CartProductList Products="listaCarrito" DisplayBuyButton="false"></CartProductList>
+
+
+@code {
+    List<CartProduct> listaCarrito = new List<CartProduct>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaCarrito = await httpClient.GetFromJsonAsync<List<CartProduct>>("/api/cartproduct/articulos");
+    }
+}

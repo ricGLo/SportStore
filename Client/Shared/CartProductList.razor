@@ -1,0 +1,38 @@
+﻿@inject HttpClient httpClient
+@using SportStore.Shared.Models
+@inject NavigationManager navigationManager
+
+
+
+
+<div class="container mt-4">
+    <div class="row">
+        @foreach (var articulo in Products)
+        {
+            <div class="col-auto mb-3">
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src=@articulo.ImageURL alt="Book.Imagen">
+                    <div class="card-body">
+                        <h5 class="card-title">@articulo.Name</h5>
+                        <p class="card-text">
+                            <br>
+                            @articulo.Description
+                            <br>
+                            <b>Precio:</b> @articulo.Price
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public List<CartProduct> Products { get; set; } = new();
+    [Parameter]
+    public bool DisplayBuyButton { get; set; }
+
+}

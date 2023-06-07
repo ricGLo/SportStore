@@ -1,0 +1,19 @@
+﻿@page "/Counter"
+@inject HttpClient httpClient
+@using SportStore.Shared.Models
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+
+<PageTitle>Catálogo</PageTitle>
+
+<h1 style="text-align:center">  Catálogo  </h1>
+<ProductList Products="listaArticulos" DisplayBuyButton="true"></ProductList>
+
+@code {
+    List<Product> listaArticulos = new List<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaArticulos = await httpClient.GetFromJsonAsync<List<Product>>("/api/product/articulos");
+    }
+}
